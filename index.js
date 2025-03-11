@@ -28,7 +28,7 @@ app.use('/', staticRouter )
 app.use('/blog' ,BlogRouter)
 app.use('/' ,CommentRouter)
 
-app.get('/logout',(req,res)=>{
+app.get('/logout',(req,res)=>{ 
     res.clearCookie("uid") 
     res.redirect("/")
 })

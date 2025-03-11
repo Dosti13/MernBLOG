@@ -33,7 +33,7 @@ router.get('/blog/delete/:id',isAuthor,async(req,res)=>{
         res.render("deleteblog", { blog });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send("");
     }
 })
 router.get('/blog/update/:id',isAuthor,async(req,res)=>{
@@ -48,7 +48,7 @@ router.get('/blog/update/:id',isAuthor,async(req,res)=>{
         res.render("updateblog", { blog });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send("");
     }
 })
 
