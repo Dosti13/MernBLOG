@@ -1,6 +1,8 @@
 const fs = require('fs')
  const cloudinary = require('cloudinary').v2;
  const Blog = require('../model/Blog')
+ const streamifier = require('streamifier');
+
  require("dotenv").config()
  cloudinary.config({
      cloud_name: process.env.CLOUDANARY_NAME,
@@ -10,14 +12,22 @@ const fs = require('fs')
 async function handlefileupload(req,res) {
    
     const {title,description} = req.body
-    const files = req.file 
     try {
         
-        const result = await cloudinary.uploader.upload(files.path , {
-            folder: "blog_images",
-        });
-        fs.unlinkSync(files.path);
-        const file = result.secure_url
+    
+    const uplloadResult =  await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: 'your_folder_name' }, 
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        
+        streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+      });
+
+        const file = uplloadResult.secure_url
 
         const newBlog = new Blog({
              title
@@ -28,14 +38,13 @@ async function handlefileupload(req,res) {
             });
          newBlog.save();
          return res.redirect("/")
-    } catch (error) {
-   console.log(error);
+    }
+    catch(error){
+        console.log(error);
         
     }
 
-    }
-
-
+}
 async function handleGetUserByID(req,res) {
 
         try {
