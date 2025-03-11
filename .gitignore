@@ -35,3 +35,4 @@ Thumbs.db
 
 # Cloudinary upload folder (if any local files are used for uploads)
 uploads/
+.vercel
